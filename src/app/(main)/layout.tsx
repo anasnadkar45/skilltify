@@ -8,7 +8,7 @@ export default async function ProjectLayout({
     return (
         <div className="w-screen h-screen flex custom-scrollbar scroll-smooth">
             <Sidebar />
-            <div className="m-3 rounded-md border w-full bg-secondary">
+            <div className="m-[0.75rem] rounded-md border w-full bg-secondary">
                 {children}
             </div>
         </div>

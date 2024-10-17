@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ArrowLeft, HomeIcon, ChartPie, Book, FileText, MessageSquare, Layout, CalendarIcon, ArrowRight, BookOpenCheckIcon } from "lucide-react";
+import { ArrowLeft, HomeIcon, ChartPie, Book, FileText, MessageSquare, Layout, CalendarIcon, ArrowRight, BookOpenCheckIcon, BrainCircuit } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -74,6 +74,12 @@ export const dashboardLinks = [
         href: "/calendar",
         icon: CalendarIcon,
       },
+      {
+        id: 2,
+        name: "Paper Builder",
+        href: "/paper-builder",
+        icon: BrainCircuit,
+      }
     ],
   },
 ];
