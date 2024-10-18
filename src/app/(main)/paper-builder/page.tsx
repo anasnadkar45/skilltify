@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 // Replace with your actual API key
 const geminiApiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
-const SingleRecordDetails: React.FC = () => {
+const PaperBuilder: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState<boolean>(false);
     const [uploadSuccess, setUploadSuccess] = useState<boolean>(false);
@@ -17,6 +17,7 @@ const SingleRecordDetails: React.FC = () => {
     const [filename, setFilename] = useState<string>("");
     const [filetype, setFileType] = useState<string>("");
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    console.log(analysisResult);
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -63,7 +64,21 @@ const SingleRecordDetails: React.FC = () => {
             ];
 
             const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
-            const prompt = `You are an expert educational content generator. Based on the following text extracted from a PDF document, generate a set of 50 exam questions that may arise from the content. The questions should cover key concepts, important details, and critical thinking aspects related to the material. Ensure that the questions are clear, concise, and formatted appropriately for a typical exam setting. `;
+            // const prompt = `You are an expert career consultant and resume reviewer. Your task is to review the following resume and provide constructive feedback. The feedback should include:
+
+            // 1. **Strengths**: List the positive aspects of the resume and highlight the areas where the candidate is performing well.
+            // 2. **Areas for Improvement**: Provide suggestions on what can be improved or optimized for a better impression.
+            // 3. **Keywords to Include**: Identify industry-relevant keywords or skills that should be added to make the resume more aligned with the candidate's field and make it stand out to recruiters and Applicant Tracking Systems (ATS).
+            // 4. **Content to Remove**: Suggest any content, sections, or phrases that should be removed or modified to streamline the resume and make it more concise and relevant.
+            // 5. **Summary**: Give a short, clear summary of the candidate's resume, capturing their experience, skills, and qualifications in 2-3 sentences.
+            // `;
+            const prompt = `You are an expert educational content planner. Based on the following text extracted from a PDF document, generate a structured study schedule that includes:
+
+1. A concise summary of the key concepts and important details in the text.
+2. A set of 50 exam questions with their answers that may arise from the content, covering critical thinking aspects related to the material.
+3. A daily study plan that outlines recommended study sessions, duration for each session, and the topics or questions to focus on each day.
+
+Ensure that the study schedule is clear and easy to follow, allowing the user to effectively prepare for the exam.`;
 
             const result = await model.generateContent([prompt, ...imageParts]);
             const response = await result.response;
@@ -91,7 +106,7 @@ const SingleRecordDetails: React.FC = () => {
                     className="mt-6 inline-flex items-center gap-x-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-[#13131a] dark:text-white dark:hover:bg-neutral-800"
                 >
                     <UploadIcon />
-                    Upload Reports
+                    Upload Sylabus or a Book
                 </button>
                 <FileUploadModal
                     isOpen={isModalOpen}
@@ -103,8 +118,6 @@ const SingleRecordDetails: React.FC = () => {
                     filename={filename}
                 />
                 <div className="space-y-2 p-2 text-muted-foreground">
-
-
                     <Markdown>{analysisResult}</Markdown>
                 </div>
             </div>
@@ -112,4 +125,4 @@ const SingleRecordDetails: React.FC = () => {
     );
 };
 
-export default SingleRecordDetails;
+export default PaperBuilder;

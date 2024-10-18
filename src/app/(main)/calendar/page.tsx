@@ -45,11 +45,11 @@ export default function CustomCalendar() {
   const [taskCourse, setTaskCourse] = useState<string>('')
   const [taskRepeat, setTaskRepeat] = useState<string>('Does Not Repeat')
   const [events, setEvents] = useState<Event[]>([
-    { 
+    {
       id: '1',
-      title: 'Custom Calendar', 
-      date: '2024-10-10', 
-      time: '12:00', 
+      title: 'Custom Calendar',
+      date: '2024-10-10',
+      time: '12:00',
       description: 'Create a Documentation for Ree',
       color: '#FF5733',
       allDay: false,
@@ -61,6 +61,7 @@ export default function CustomCalendar() {
   const [calendarView, setCalendarView] = useState<CalendarView>('month')
 
   const todayDate = new Date();
+  // console.log(todayDate)
 
   useEffect(() => {
     setSelectedDate(currentDate.toISOString().split('T')[0])
@@ -111,6 +112,7 @@ export default function CustomCalendar() {
     setSelectedEvent(null)
     resetForm()
     setIsModalOpen(true)
+    console.log(date.getDate())
   }
 
   const handleEventClick = (event: Event) => {
@@ -163,6 +165,13 @@ export default function CustomCalendar() {
     }
   }
 
+  // Utility function to compare dates
+  const isSameDate = (date1: Date, date2: Date) => {
+    return date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate();
+  };
+
   const renderMonthView = () => (
     <div className="grid grid-cols-7 bg-card">
       {weekDays.map(day => (
@@ -171,21 +180,25 @@ export default function CustomCalendar() {
       {days.map(({ day, date, isCurrentMonth }, index) => (
         <div
           key={index}
-          className={`min-h-20 border p-1 ${isCurrentMonth ? 'text-foreground' : 'text-transparent'} ${todayDate === currentDate ? 'bg-background' : ''}`}
+          className={`min-h-20 border p-1 
+          ${isCurrentMonth ? 'text-foreground' : 'text-transparent'}
+          ${isSameDate(todayDate, date) ? 'bg-background text-primary' : ''}
+          ${isSameDate(currentDate, date) ? 'bg-muted' : ''}`
+          }
           onClick={() => isCurrentMonth && handleDateTimeClick(date)}
         >
           <div className="text-right">{day}</div>
-          {events.filter(event => event.date === date.toISOString().split('T')[0]).map((event) => (
-            <div 
+          {events.filter(event => isSameDate(new Date(event.date), date)).map((event) => (
+            <div
               key={event.id}
               className="text-xs p-1 mt-1 rounded cursor-pointer"
-              style={{ 
+              style={{
                 backgroundColor: event.color,
                 color: getContrastColor(event.color)
               }}
               onClick={(e) => {
-                e.stopPropagation()
-                handleEventClick(event)
+                e.stopPropagation();
+                handleEventClick(event);
               }}
             >
               {event.title}
@@ -194,12 +207,13 @@ export default function CustomCalendar() {
         </div>
       ))}
     </div>
-  )
+  );
+
 
   const renderWeekView = () => {
     const weekStart = new Date(currentDate);
     weekStart.setDate(currentDate.getDate() - currentDate.getDay());
-  
+
     return (
       <div className="grid grid-cols-8 bg-card">
         <div className="border p-2"></div>
@@ -213,9 +227,9 @@ export default function CustomCalendar() {
               const currentDay = new Date(weekStart);
               currentDay.setDate(weekStart.getDate() + dayIndex);
               const currentDateTime = new Date(currentDay.setHours(hour, 0, 0, 0));
-  
+
               const isCurrentDay = currentDay.toDateString() === new Date().toDateString(); // Check if it's today
-  
+
               return (
                 <div
                   key={dayIndex}
@@ -252,32 +266,32 @@ export default function CustomCalendar() {
       </div>
     );
   };
-  
+
 
   const renderDayView = () => (
     <div className="grid grid-cols-1 bg-card">
       <div className="text-center bg-background py-2 border">{currentDate.toDateString()}</div>
       {Array.from({ length: 24 }, (_, hour) => {
         const currentDateTime = new Date(currentDate.setHours(hour, 0, 0, 0))
-        
+
         return (
-          <div 
-            key={hour} 
-            className="border p-2 min-h-[60px]" 
+          <div
+            key={hour}
+            className="border p-2 min-h-[60px]"
             onClick={() => handleDateTimeClick(currentDateTime, `${hour.toString().padStart(2, '0')}:00`)}
           >
             <div className="text-right">{`${hour.toString().padStart(2, '0')}:00`}</div>
             {events
               .filter(event => {
                 const eventDate = new Date(event.date)
-                return eventDate.toDateString() === currentDate.toDateString() && 
-                       parseInt(event.time.split(':')[0]) === hour
+                return eventDate.toDateString() === currentDate.toDateString() &&
+                  parseInt(event.time.split(':')[0]) === hour
               })
               .map((event) => (
-                <div 
+                <div
                   key={event.id}
                   className="text-xs p-1 mt-1 rounded cursor-pointer"
-                  style={{ 
+                  style={{
                     backgroundColor: event.color,
                     color: getContrastColor(event.color)
                   }}
@@ -323,7 +337,7 @@ export default function CustomCalendar() {
           <ChevronLeft className="cursor-pointer" onClick={handlePrev} />
           <ChevronRight className="cursor-pointer" onClick={handleNext} />
           <span className="text-xl">
-            {calendarView === 'month' 
+            {calendarView === 'month'
               ? currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })
               : calendarView === 'week'
                 ? `Week of ${currentDate.toLocaleDateString()}`

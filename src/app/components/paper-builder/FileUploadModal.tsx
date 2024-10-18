@@ -23,11 +23,11 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
 }) => {
   return (
     <Modal
-      title="Upload Reports"
+      title="Upload Sylabus or a book"
       isOpen={isOpen}
       onClose={onClose}
       onAction={onFileUpload}
-      actionLabel="Upload and Analyze"
+      actionLabel="Upload Sylabus or a book"
     >
       <div className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 p-8 text-slate-700 dark:border-slate-700 dark:text-slate-300">
         <svg
@@ -46,7 +46,7 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
         <div className="group">
           <label
             htmlFor="fileInputDragDrop"
-            className="cursor-pointer font-medium text-blue-700 group-focus-within:underline dark:text-blue-600"
+            className="cursor-pointer font-medium text-orange-400 group-focus-within:underline"
           >
             <input
               id="fileInputDragDrop"
@@ -64,14 +64,14 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
       {uploading && (
         <CircleDashed
           size={15}
-          className="mr-3 mt-3 h-7 w-5 animate-spin text-white"
+          className="mr-3 mt-3 h-7 w-5 animate-spin text-foreground"
         />
       )}
 
       {uploadSuccess && (
         <p className="mt-2 text-green-600">Upload successful!</p>
       )}
-      <span className="text-md text-left text-white">{filename}</span>
+      <span className="text-md text-left text-muted-foreground">{filename}</span>
     </Modal>
   );
 };
