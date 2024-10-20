@@ -76,8 +76,8 @@ export const dashboardLinks = [
       },
       {
         id: 2,
-        name: "Paper Builder",
-        href: "/paper-builder",
+        name: "Study Plan",
+        href: "/study-plan",
         icon: BrainCircuit,
       }
     ],

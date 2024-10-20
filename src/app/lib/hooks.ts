@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
 import { auth } from "./auth";
 
-export const requireUser = async () => {
+export async function requireUser() {
     const session = await auth();
-    if(!session?.user){
-        return redirect('/')
+
+    if (!session?.user?.id) {
+        return redirect("/");
     }
 
     return session;
