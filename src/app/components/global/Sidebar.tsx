@@ -94,7 +94,7 @@ export const Sidebar = () => {
         {/* Toggle button to collapse/expand the sidebar */}
         <Button
           size={"icon"}
-          className="absolute size-6 -right-6 top-60"
+          className="absolute size-6 -right-3 top-60 z-30"
           onClick={() => setIsExpand(!isExpand)}
         >
           {isExpand ? <ArrowLeft /> : <ArrowRight />}

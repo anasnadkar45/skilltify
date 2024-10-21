@@ -20,13 +20,13 @@ export async function StudyPlanAction(prevState: any, formData: FormData) {
     }
 
     // Extract the validated data
-    const { title } = submission.value;
+    const { title,content } = submission.value;
 
     // Create a new study plan in the database
     await prisma.studyPlan.create({
         data: {
             title: title,
-            // content: content,  // Assuming `content` is already in a JSON format
+            content: content,  // Assuming `content` is already in a JSON format
             userId: session.user?.id,  // Link to the currently logged-in user
         }
     });

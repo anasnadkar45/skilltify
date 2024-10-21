@@ -22,7 +22,7 @@ const StudyPlanBuilder: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState<boolean>(false);
     const [uploadSuccess, setUploadSuccess] = useState<boolean>(false);
-    const [studyPlan, setStudyPlan] = useState<JSONContent>(); // Store output as JSON
+    const [studyPlan, setStudyPlan] = useState<string>(''); // Store output as JSON
     const [title, setTitle] = useState<string>("");
     const [filetype, setFileType] = useState<string>("");
     const [lastResult, action] = useFormState(StudyPlanAction, undefined);
@@ -128,20 +128,20 @@ const StudyPlanBuilder: React.FC = () => {
             let text = await response.text();
 
             // Clean the response by removing markdown code block symbols
-            text = text.replace(/```json/g, "").replace(/```/g, "");
+            // text = text.replace(/```json/g, "").replace(/```/g, "");
 
-            // Parse the cleaned text as JSON
-            let jsonResult;
-            try {
-                // Parse the cleaned text as JSON
-                jsonResult = JSON.parse(text);
-            } catch (jsonError) {
-                console.error("JSON parse error:", jsonError);
-                toast.error("Failed to parse JSON response.");
-                return; // Exit if JSON parsing fails
-            }
+            // // Parse the cleaned text as JSON
+            // let jsonResult;
+            // try {
+            //     // Parse the cleaned text as JSON
+            //     jsonResult = JSON.parse(text);
+            // } catch (jsonError) {
+            //     console.error("JSON parse error:", jsonError);
+            //     toast.error("Failed to parse JSON response.");
+            //     return; // Exit if JSON parsing fails
+            // }
 
-            setStudyPlan(jsonResult); // Store the result as JSON
+            setStudyPlan(text); // Store the result as JSON
 
             // if (studyPlan !== null) {
             //     setUploadSuccess(true);
@@ -175,72 +175,14 @@ const StudyPlanBuilder: React.FC = () => {
     console.log(studyPlan)
     console.log(title)
     return (
-        <ScrollArea className="h-[calc(100vh-1.75rem)] w-full">
-            <div className="flex flex-col justify-center items-center">
-                <Card className="w-full max-w-md mx-auto">
-                    {/* <CardHeader>
-                        <CardTitle>{step === 1 ? 'Enter Title' : 'Upload PDF'}</CardTitle>
-                    </CardHeader>
-                    <form id={form.id} onSubmit={form.onSubmit} action={action} noValidate>
-                        <CardContent>
-                            {step === 1 ? (
-                                <div className="space-y-4">
-                                    <Label htmlFor="title">Title</Label>
-                                    <Input
-                                        id="title"
-                                        placeholder="Enter the title"
-                                        name={fields.title.name}
-                                        defaultValue={fields.title.initialValue}
-                                        key={fields.title.key}
-                                        value={title}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                    />
-                                    <p className="text-red-500 text-sm">{fields.title.errors}</p>
-                                </div>
-                            ) : (
-                                <div className="space-y-4">
-                                    <p className="text-sm text-muted-foreground">Title: {title}</p>
-                                    <div className="grid w-full max-w-sm items-center gap-1.5">
-                                        <Label htmlFor="pdf-upload">Upload PDF</Label>
-
-                                        <Input
-                                            id="content"
-                                            type="file"
-                                            accept=".pdf"
-                                            name={fields.content.name}
-                                            defaultValue={fields.content.initialValue}
-                                            key={fields.content.key}
-                                            onChange={handleFileChange}
-                                        />
-                                        <p className="text-red-500 text-sm">{fields.content.errors}</p>
-                                    </div>
-                                </div>
-                            )}
-                        </CardContent>
-                        <CardFooter className="flex justify-end">
-                            {step === 1 ? (
-                                <Button onClick={handleNextStep} disabled={fields.title.value === ''}>
-                                    Next
-                                </Button>
-                            ) : (
-                                <div>
-                                    {uploading && (
-                                        <CircleDashed
-                                            size={15}
-                                            className="mr-3 mt-3 h-7 w-5 animate-spin text-foreground"
-                                        />
-                                    )}
-                                    {studyPlan !== null ? (
-                                        <SubmitButton className="w-full" text="Submit" />
-                                    ) : (
-                                        <Button className="w-full" onClick={handleFileUpload}>
-                                            <Upload className="mr-2 h-4 w-4" /> Upload PDF
-                                        </Button>
-                                    )}
-                                </div>
-                            )}
-                        </CardFooter>
-                    </form> */}
+        <div className="w-full h-full flex justify-center items-center">
+            <Card className="w-full max-w-md">
+                <CardHeader>
+                    <CardTitle>
+                        Study Plan Form
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
                     <form id={form.id} onSubmit={form.onSubmit} action={action} noValidate>
                         <div className="space-y-4">
                             <Label htmlFor="title">Title</Label>
@@ -254,12 +196,39 @@ const StudyPlanBuilder: React.FC = () => {
                                 onChange={(e) => setTitle(e.target.value)}
                             />
                             <p className="text-red-500 text-sm">{fields.title.errors}</p>
-                            <SubmitButton className="w-full" text="Submit" />
+                            <Input
+                            type="hidden"
+                                placeholder="Content will generate over here dont do anything"
+                                name={fields.content.name}
+                                defaultValue={fields.content.initialValue}
+                                key={fields.content.key}
+                                value={studyPlan}
+                            />
+                            <p className="text-red-500 text-sm">{fields.title.errors}</p>
+                            {uploading && (
+                                <CircleDashed
+                                    size={15}
+                                    className="mr-3 mt-3 h-7 w-5 animate-spin text-foreground"
+                                />
+                            )}
+                            <Input
+                                id="content"
+                                type="file"
+                                accept=".pdf"
+                                onChange={handleFileChange}
+                            />
+                            {studyPlan.length > 0 ? (
+                                <SubmitButton className="w-full" text="Submit" />
+                            ) : (
+                                <Button className="w-full" onClick={handleFileUpload}>
+                                    <Upload className="mr-2 h-4 w-4" /> Upload PDF
+                                </Button>
+                            )}
                         </div>
                     </form>
-                </Card>
-            </div>
-        </ScrollArea>
+                </CardContent>
+            </Card>
+        </div>
     );
 };
 
