@@ -10,7 +10,7 @@ export default async function ProjectLayout({
         <div className="w-screen h-screen flex custom-scrollbar scroll-smooth">
             <Sidebar />
             <div className="m-[0.75rem] rounded-md border w-full bg-secondary">
-                <ScrollArea className="h-[calc(100vh-1.75rem)]">
+                <ScrollArea className="h-[calc(100vh-1.65rem)]">
                     {children}
                 </ScrollArea>
             </div>

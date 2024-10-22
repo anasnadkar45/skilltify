@@ -82,46 +82,71 @@ const StudyPlanBuilder: React.FC = () => {
             const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
             const prompt = `You are an expert educational planner. Based on the following content extracted from a PDF document, generate a personalized study plan in JSON format and 50 exam questions with their detailed answers in brief for each type of question, including fill-in-the-blanks, multiple-choice, short answers, and brief answers. The study plan should include the following fields:
+{
+  "summary": "A concise summary of the key concepts and important details found in the text.",
+  "studyPlan": {
+    "dailySessions": [
+      {
+        "day": 1,
+        "topics": ["Topic 1", "Topic 2"],
+        "duration": "2 hours",
+        "resources": [
+          {
+            "topic": "Topic 1",
+            "website": "https://example.com/topic1",
+            "description": "Resource for deeper understanding of Topic 1."
+          },
+          {
+            "topic": "Topic 2",
+            "website": "https://example.com/topic2",
+            "description": "Resource for deeper understanding of Topic 2."
+          }
+        ],
+        "quiz": {
+          "questions": [
             {
-              "summary": "A concise summary of the key concepts and important details found in the text.",
-              "studyPlan": {
-                "dailySessions": [
-                  {
-                    "day": 1,
-                    "topics": ["Topic 1", "Topic 2"],
-                    "duration": "2 hours",
-                    "quiz": {
-                      "questions": [
-                        {
-                          "question": "What is Topic 1?",
-                          "answer": "Topic 1 is..."
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "day": 2,
-                    "topics": ["Topic 3", "Topic 4"],
-                    "duration": "1.5 hours"
-                  }
-                ],
-                "finalExamPreparation": {
-                  "revision": ["Topic 1", "Topic 2"],
-                  "mockExam": "Complete the mock exam covering all topics."
-                }
-              },
-              "questions": [
-                {
-                  "type": "multiple choice",
-                  "question": "What is the capital of France?",
-                  "options": ["Berlin", "Madrid", "Paris", "Lisbon"],
-                  "answer": "Paris",
-                  "details": "Paris is the capital city of France."
-                },
-                ...
-              ]
+              "question": "What is Topic 1?",
+              "answer": "Topic 1 is..."
             }
-            Ensure the JSON structure is properly formatted.`;
+          ]
+        }
+      },
+      {
+        "day": 2,
+        "topics": ["Topic 3", "Topic 4"],
+        "duration": "1.5 hours",
+        "resources": [
+          {
+            "topic": "Topic 3",
+            "website": "https://example.com/topic3",
+            "description": "Resource for deeper understanding of Topic 3."
+          },
+          {
+            "topic": "Topic 4",
+            "website": "https://example.com/topic4",
+            "description": "Resource for deeper understanding of Topic 4."
+          }
+        ]
+      }
+    ],
+    "finalExamPreparation": {
+      "revision": ["Topic 1", "Topic 2"],
+      "mockExam": "Complete the mock exam covering all topics."
+    }
+  },
+  "questions": [
+    {
+      "type": "multiple choice",
+      "question": "What is the capital of France?",
+      "options": ["Berlin", "Madrid", "Paris", "Lisbon"],
+      "answer": "Paris",
+      "details": "Paris is the capital city of France."
+    },
+    ...
+  ]
+}
+Ensure the JSON structure is properly formatted and include relevant resource websites for each topic to help students find additional information.`;
+
 
             const result = await model.generateContent([prompt, ...imageParts]);
             const response = await result.response;
@@ -197,7 +222,7 @@ const StudyPlanBuilder: React.FC = () => {
                             />
                             <p className="text-red-500 text-sm">{fields.title.errors}</p>
                             <Input
-                            type="hidden"
+                                type="hidden"
                                 placeholder="Content will generate over here dont do anything"
                                 name={fields.content.name}
                                 defaultValue={fields.content.initialValue}

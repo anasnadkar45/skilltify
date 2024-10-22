@@ -27,10 +27,10 @@ const page = async () => {
   const session = await requireUser();
   const data = await getData(session.user?.id as string);
 
-  if (data.length === 0) {
-    console.log("No study plans found for this user.");
-    return <p>No study plans available.</p>;
-  }
+  // if (data.length === 0) {
+  //   console.log("No study plans found for this user.");
+  //   return <p>No study plans available.</p>;
+  // }
 
   return (
     <div className='p-4 space-y-4'>

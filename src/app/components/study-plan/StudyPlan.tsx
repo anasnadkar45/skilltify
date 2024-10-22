@@ -27,6 +27,11 @@ interface StudyPlanData {
                     answer: string;
                 }[];
             };
+            resources?: {
+                topic: string;
+                website: string;
+                description: string;
+            }[];
         }[];
     };
     questions: {
@@ -51,8 +56,8 @@ interface StudyPlanProps {
 }
 
 export const StudyPlan: React.FC<StudyPlanProps> = ({ plan }) => {
-    const [studyPlan, setStudyPlan] = useState<StudyPlanData | null>(null); // Type the studyPlan state with StudyPlanData or null
-    const [expandedDay, setExpandedDay] = useState<number | null>(null); // expandedDay is either a number (representing the day) or null
+    const [studyPlan, setStudyPlan] = useState<StudyPlanData | null>(null);
+    const [expandedDay, setExpandedDay] = useState<number | null>(null);
 
     // Effect to parse the plan content from JSON
     useEffect(() => {
@@ -62,13 +67,15 @@ export const StudyPlan: React.FC<StudyPlanProps> = ({ plan }) => {
         console.log("Cleaned Content:", cleanedContent);
 
         try {
-            const jsonData: StudyPlanData = JSON.parse(cleanedContent); // Parse and cast the JSON as StudyPlanData
-            setStudyPlan(jsonData); // Set the parsed study plan
+            const jsonData: StudyPlanData = JSON.parse(cleanedContent);
+            setStudyPlan(jsonData);
             console.log("Parsed JSON Data:", jsonData);
         } catch (error) {
             console.error("Error parsing JSON:", error);
+            console.error("Cleaned Content that caused the error:", cleanedContent);
         }
-    }, [plan.content]); // Effect will run when the `plan.content` changes
+
+    }, [plan.content]);
 
     // Function to toggle the expanded day
     const toggleDay = (day: number) => {
@@ -138,6 +145,26 @@ export const StudyPlan: React.FC<StudyPlanProps> = ({ plan }) => {
                                                 <span className="font-medium">Duration:</span>
                                                 <span>{session.duration}</span>
                                             </div>
+
+                                            {session.resources && session.resources.length > 0 && (
+                                                <div className="mt-4 space-y-2">
+                                                    <h4 className="text-lg font-semibold">Resources</h4>
+                                                    {session.resources.map((resource, i) => (
+                                                        <div key={i} className="border-gray-300">
+                                                            <h5 className="font-semibold">{resource.topic}</h5>
+                                                            <a
+                                                                href={resource.website}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-blue-600 underline"
+                                                            >
+                                                                {resource.website}
+                                                            </a>
+                                                            <p className="text-gray-700 dark:text-gray-300">{resource.description}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
 
                                             {session.quiz && (
                                                 <div className="mt-4 space-y-2">
