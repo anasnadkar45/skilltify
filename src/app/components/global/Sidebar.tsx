@@ -120,7 +120,7 @@ export const Sidebar = () => {
             <nav className="grid items-start text-sm font-medium px-2">
               {dashboardLinks.map((category, index) => (
                 <div key={index} className="mb-6">
-                  <p className="text-xs font-semibold uppercase text-muted-foreground mb-2">
+                  <p className="text-xs font-semibold uppercase mb-2">
                     {isExpand && category.category}
                   </p>
                   <div className="space-y-2">
@@ -130,7 +130,7 @@ export const Sidebar = () => {
                           <Link
                             href={link.href}
                             className={cn(
-                              "flex items-center gap-3 p-2 rounded-md hover:bg-muted",
+                              "flex items-center text-muted-foreground gap-3 p-2 rounded-md hover:bg-muted",
                               pathname === link.href ? "bg-muted" : ""
                             )}
                           >
